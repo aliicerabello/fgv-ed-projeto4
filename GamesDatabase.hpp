@@ -1,9 +1,8 @@
-// games_database.hpp
-
 #ifndef GAMES_DATABASE_HPP
 #define GAMES_DATABASE_HPP
 
 #include "Game.hpp"
+#include "Trie.hpp"
 
 /**
  *    extern means that these variables are defined
@@ -15,7 +14,7 @@
  *    when several .cpp files include this header.
  */
 
-extern Game games[];
+extern Game* games[];
 extern int numberOfGames;
 
 #endif
