@@ -149,3 +149,49 @@ void Trie::sortResults(vector<Game*>& games){
         games[j] = temp;
     }
 }
+
+void Trie::collectGames(TrieNode* node, std::vector<Game*>& results){
+    if (node == nullptr)
+        return;
+
+    if (node->isEndOfTitle && node->game != nullptr)
+        results.push_back(node->game);
+
+    for (int i = 0; i < ALPHABET_SIZE; i++)
+        collectGames(node->children[i], results);
+}
+
+vector<Game*> Trie::autocomplete(std::string prefix, int k){
+    vector<Game*> results;
+
+    if (k <= 0)
+        return results;
+    
+    prefix = toSearchKey(prefix);
+
+    if (prefix.empty())
+        return results;
+
+    TrieNode* curr = root;
+
+    for (char c : prefix){
+        int index = indexCalculator(c);
+
+        if (index == -1)
+            return results;
+
+        if (curr->children[index] == nullptr)
+            return results;
+
+        curr = curr->children[index];
+    }
+
+    collectGames(curr, results);
+
+    sortResults(results);
+
+    if (static_cast<std::vector<Game*>::size_type>(k) < results.size())
+        results.resize(static_cast<std::vector<Game*>::size_type>(k));
+    
+    return results;
+}

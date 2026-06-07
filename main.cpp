@@ -7,46 +7,15 @@
 #include "GamesDatabase.hpp"
 using namespace std;
 
-int main(int argc, char* argv[]) {
-
+int main() {
     Trie trie;
 
-    trie.insert(&games[0]);
-    trie.insert(&games[1]);
-    trie.insert(&games[2]);
+    for (int i = 0; i < numberOfGames; i++)
+        trie.insert(&games[i]);
 
-    cout << trie.contains("Counter Strike Global Offensive") << endl;
-    cout << trie.contains("counterstrikeglobaloffensive") << endl;
-    cout << trie.contains("COUNTER STRIKE GLOBAL OFFENSIVE") << endl;
+    vector<Game*> results = trie.autocomplete("ha", 5);
 
-    vector<Game*> teste;
-
-    teste.push_back(&games[1]);
-    teste.push_back(&games[0]);
-    teste.push_back(&games[2]);
-
-    trie.sortResults(teste);
-
-    for (Game* g : teste){
-        cout << g->getTitle() << " | " 
-                << g->getPopularity() << endl;
-    }
-
-    Trie trie;
-
-    Game jogo1("Halo", "FPS futurista", 90);
-    Game jogo2("Half Life", "FPS classico", 90);
-    Game jogo3("Hades", "Roguelike", 95);
-
-    vector<Game*> teste;
-
-    teste.push_back(&jogo1);
-    teste.push_back(&jogo2);
-    teste.push_back(&jogo3);
-
-    trie.sortResults(teste);
-
-    for (Game* g : teste){
+    for (Game* g : results){
         std::cout << g->getTitle() << " | "
                 << g->getPopularity() << std::endl;
     }
