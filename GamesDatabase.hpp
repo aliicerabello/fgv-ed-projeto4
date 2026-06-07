@@ -2,7 +2,6 @@
 #define GAMES_DATABASE_HPP
 
 #include "Game.hpp"
-#include "Trie.hpp"
 
 /**
  *    extern means that these variables are defined
