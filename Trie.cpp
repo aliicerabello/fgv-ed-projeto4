@@ -3,23 +3,20 @@ using namespace std;
 
 TrieNode::TrieNode(){
     isEndOfTitle = false;
-    game = nullptr; //todo nó nasce sem jogo associado
+    game = nullptr;
     for (int i = 0; i < ALPHABET_SIZE; i++)
         children[i] = nullptr;
 }
 
-//destrutor
 TrieNode::~TrieNode(){
     for (int i = 0; i < ALPHABET_SIZE; i++)
         delete children[i];
 }
 
-//construtor
 Trie::Trie(){
     root = new TrieNode();
 }
 
-//destrutor
 Trie::~Trie(){
     delete root;
 }
@@ -55,24 +52,23 @@ bool Trie::insert(Game* game){
             return false;
 
         if (curr->children[index_k] == nullptr){
-            TrieNode* node = new TrieNode(); //cria um novo nó da trie
-            curr->children[index_k] = node; // faz ele apontar p alguem novo
+            TrieNode* node = new TrieNode();
+            curr->children[index_k] = node;
         }
 
-        curr = curr->children[index_k]; //ja tem o char k
+        curr = curr->children[index_k]; 
     }
     
-    curr->isEndOfTitle = true; //fim de palavra
+    curr->isEndOfTitle = true;
     curr->game = game;
 
     return true;
 }
 
 
-bool Trie::contains(std::string title){
+bool Trie::contains(string title){
     title = toSearchKey(title);
-    
-    //estamos supondo que o title ja ta ok
+
     if (title.empty())
         return false;
 
@@ -90,29 +86,28 @@ bool Trie::contains(std::string title){
         curr = curr->children[index_k];
     }
 
-    return curr->isEndOfTitle; //se for fim de palavra, ta safe (pdoe ter casaco mas nao casa)
+    return curr->isEndOfTitle;
 }
 
 string Trie::toSearchKey(string text){
-    //considerar que os títulos possuem apenas letras, números e espaços (enunciado)
     if (text.empty())
         return text;
 
     string text_new = "";
 
     for (char k : text){
-        if (k == ' ') //pular o espaço
+        if (k == ' ')
             continue;
 
-        else if ('a' <=  k && k <= 'z') //minuscula
+        else if ('a' <=  k && k <= 'z')
             text_new += k;
 
-        else if ('A' <= k && k <= 'Z'){ //maiuscula
-            k = k - 'A' + 'a'; //transformar em maiscula no seu respectivo lugar da tabela
-            text_new += k;
+        else if ('A' <= k && k <= 'Z'){ 
+            k = k - 'A' + 'a';  
+            text_new +=k;
         }
 
-        else if ('0' <= k && k <= '9') //numero
+        else if ('0' <= k && k <= '9')
             text_new += k;
     }
     return text_new;
@@ -150,18 +145,24 @@ void Trie::sortResults(vector<Game*>& games){
     }
 }
 
-void Trie::collectGames(TrieNode* node, std::vector<Game*>& results){
+void Trie::collectGames(TrieNode* node, vector<Game*>& results, int k){
     if (node == nullptr)
         return;
 
-    if (node->isEndOfTitle && node->game != nullptr)
+    if (node->isEndOfTitle && node->game != nullptr){
         results.push_back(node->game);
 
+        sortResults(results);
+
+        if (results.size() > static_cast<vector<Game*>::size_type>(k))
+            results.pop_back();
+    }
+
     for (int i = 0; i < ALPHABET_SIZE; i++)
-        collectGames(node->children[i], results);
+        collectGames(node->children[i], results, k);
 }
 
-vector<Game*> Trie::autocomplete(std::string prefix, int k){
+vector<Game*> Trie::autocomplete(string prefix, int k){
     vector<Game*> results;
 
     if (k <= 0)
@@ -186,12 +187,7 @@ vector<Game*> Trie::autocomplete(std::string prefix, int k){
         curr = curr->children[index];
     }
 
-    collectGames(curr, results);
+    collectGames(curr, results, k);
 
-    sortResults(results);
-
-    if (static_cast<std::vector<Game*>::size_type>(k) < results.size())
-        results.resize(static_cast<std::vector<Game*>::size_type>(k));
-    
     return results;
 }

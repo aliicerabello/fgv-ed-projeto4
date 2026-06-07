@@ -24,7 +24,7 @@ class Trie {
 private:
 
     TrieNode* root;
-    void collectGames(TrieNode* node, std::vector<Game*>& results);
+    void collectGames(TrieNode* node, std::vector<Game*>& results, int k);
 
 public:
 
