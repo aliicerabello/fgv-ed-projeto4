@@ -1,7 +1,9 @@
+#ifndef TRIE_HPP
+#define TRIE_HPP
+
 #include <stdlib.h>
 #include <vector>
 #include "Game.hpp"
-
 
 const int ALPHABET_SIZE = 36; //letra e num
 
@@ -37,6 +39,6 @@ public:
 
     std::string toSearchKey(std::string text);
     void sortResults(std::vector<Game*>& games);
-
-
 };
+
+#endif

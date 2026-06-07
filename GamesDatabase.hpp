@@ -14,7 +14,7 @@
  *    when several .cpp files include this header.
  */
 
-extern Game* games[];
+extern Game games[];
 extern int numberOfGames;
 
 #endif

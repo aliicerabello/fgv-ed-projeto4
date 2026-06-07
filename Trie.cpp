@@ -1,6 +1,6 @@
 #include "Trie.hpp"
+using namespace std;
 
-//construtor
 TrieNode::TrieNode(){
     isEndOfTitle = false;
     game = nullptr; //todo nó nasce sem jogo associado
@@ -31,14 +31,14 @@ int Trie::indexCalculator(char k){
     if ('0' <= k && k <= '9')
         return 26 + ( k - '0');
 
-    return -1; // talvez tornal isso um void?
+    return -1;
 }
 
 bool Trie::insert(Game* game){
     if (game == nullptr)
         return false;
 
-    std::string title = toSearchKey(game->getTitle());
+    string title = toSearchKey(game->getTitle());
 
     if (title.empty())
         return false;
@@ -89,16 +89,16 @@ bool Trie::contains(std::string title){
 
         curr = curr->children[index_k];
     }
-    
+
     return curr->isEndOfTitle; //se for fim de palavra, ta safe (pdoe ter casaco mas nao casa)
 }
 
-std::string Trie::toSearchKey(std::string text){
+string Trie::toSearchKey(string text){
     //considerar que os títulos possuem apenas letras, números e espaços (enunciado)
     if (text.empty())
         return text;
 
-    std::string text_new = "";
+    string text_new = "";
 
     for (char k : text){
         if (k == ' ') //pular o espaço
@@ -125,27 +125,27 @@ bool Trie::comesBefore(Game* game1, Game* game2){
     if (pop1 > pop2)
         return true;
 
-    else if (pop2 > pop1)
+    if (pop2 > pop1)
         return false;
 
-    else {
-        std::string title1 = game1->getTitle();
-        std::string title2 = game2->getTitle();
-        
-        title1 = toSearchKey(title1);
-        title2 = toSearchKey(title2);
-    
-        for (int k = 0; k < title1.size() && k < title2.size(); k++){
-            if (title1[k] > title2[k])
-                return false;
-            else if (title1[k] < title2[k])
-                return true;
-        }
-        return title1.size() < title2.size(); //casa < casaco
-    }
+    string title1 = toSearchKey(game1->getTitle());
+    string title2 = toSearchKey(game2->getTitle());
+
+    return title1 < title2;
 }
 
 
-void Trie::sortResults(std::vector<Game*>& games){ //usando o insertion
-    //implementar o
+void Trie::sortResults(vector<Game*>& games){
+    for (vector<Game*>::size_type i = 1; i < games.size(); i++){
+        Game* temp = games[i];
+
+        vector<Game*>::size_type j = i;
+
+        while (j > 0 && comesBefore(temp, games[j - 1])){
+            games[j] = games[j - 1];
+            j--;
+        }
+
+        games[j] = temp;
+    }
 }
