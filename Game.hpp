@@ -3,7 +3,7 @@
 
 #include <string>
 
-class Game {
+class Game{
 
 private:
     std::string title;

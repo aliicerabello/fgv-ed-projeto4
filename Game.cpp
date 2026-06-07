@@ -1,7 +1,6 @@
 #include "Game.hpp"
 #include "Trie.hpp"
 
-//construtor
 Game::Game(){
 
 }
@@ -12,7 +11,6 @@ Game::Game(std::string title_, std::string shortDescription_, int popularity_){
     this->popularity = popularity_;
 }
 
-//destrutor
 Game::~Game(){
 
 }
