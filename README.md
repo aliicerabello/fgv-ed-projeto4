@@ -1,4 +1,3 @@
-````md
 # Trabalho 4: Sistema de Autocomplete de Jogos com Trie
 
 ![C++](https://img.shields.io/badge/language-C++-blue)
@@ -485,4 +484,3 @@ A implementação tem como foco:
 - manutenção dos melhores `k` resultados durante a coleta;
 - análise de complexidade algorítmica;
 - organização modular de código em C++.
-````
