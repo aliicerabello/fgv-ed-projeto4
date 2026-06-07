@@ -5,19 +5,35 @@
 #include "Game.hpp"
 #include "Trie.hpp"
 #include "GamesDatabase.hpp"
+
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc != 3) {
+        cout << "Usage: ./app k prefixo" << endl;
+        return 1;
+    }
+
+    int k = atoi(argv[1]);
+    string prefix = argv[2];
+
     Trie trie;
 
-    for (int i = 0; i < numberOfGames; i++)
+    for (int i = 0; i < numberOfGames; i++) {
         trie.insert(&games[i]);
+    }
 
-    vector<Game*> results = trie.autocomplete("ha", 5);
+    vector<Game*> results = trie.autocomplete(prefix, k);
 
-    for (Game* g : results){
-        std::cout << g->getTitle() << " | "
-                << g->getPopularity() << std::endl;
+    if (results.empty()) {
+        cout << "No results found" << endl;
+        return 0;
+    }
+
+    for (Game* game : results) {
+        cout << game->getTitle() << " | "
+                  << game->getShortDescription() << " | "
+                  << game->getPopularity() << endl;
     }
 
     return 0;
